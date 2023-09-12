@@ -1,4 +1,4 @@
-use egui::{CentralPanel, Label, Ui};
+use egui::{CentralPanel, Label, ScrollArea, Ui};
 use macroquad::prelude::*;
 
 struct Lista {
@@ -40,20 +40,22 @@ async fn main() {
         //? Positions and sizes are measured in points. Each point may consist of many physical pixels.
         egui_macroquad::ui(|ctx| {
             CentralPanel::default().show(ctx, |ui| {
-                ui.add(Label::new("Hello World!"));
+                ScrollArea::vertical().show(ui, |ui| {
+                    ui.add(Label::new("Hello World!"));
 
-                for i in &lista.items {
-                    ui.label(&i.title);
-                    ui.label(&i.desc);
-                    ui.label(&i.url);
-                }
+                    for i in &lista.items {
+                        ui.label(&i.title);
+                        ui.label(&i.desc);
+                        ui.label(&i.url);
+                    }
 
-                ui.label("A shorter and more convenient way to add a label. 😊");
-                if ui.button("Click me").clicked() {
-                    // take some action here
-                }
+                    ui.label("A shorter and more convenient way to add a label. 😊");
+                    if ui.button("Click me").clicked() {
+                        // take some action here
+                    }
 
-                ui_counter(ui, &mut c);
+                    ui_counter(ui, &mut c);
+                })
             });
         });
 
