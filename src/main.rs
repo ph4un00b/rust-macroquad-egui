@@ -1,8 +1,12 @@
 use std::borrow::Cow;
 
-use egui::{CentralPanel, FontData, FontDefinitions, Label, ScrollArea, Ui};
+use constants::PADDING;
+use egui::{
+    CentralPanel, Color32, FontData, FontDefinitions, Label, Layout, RichText, ScrollArea,
+    Separator, Ui,
+};
 use macroquad::prelude::*;
-
+mod constants;
 struct Lista {
     items: Vec<CardData>,
 }
@@ -10,8 +14,8 @@ struct Lista {
 impl Lista {
     fn new() -> Self {
         let iter = (0..20).map(|x| CardData {
-            title: format!("{} título", x),
-            desc: format!("{} desc", x),
+            title: format!("{} title", x),
+            desc: format!("{} description", x),
             url: format!("https://example.com/{}", x),
         });
         Self {
@@ -61,14 +65,21 @@ async fn main() {
                     ui.add(Label::new("Hello World!"));
 
                     for i in &lista.items {
-                        ui.label(&i.title);
-                        ui.label(&i.desc);
-                        ui.label(&i.url);
-                    }
+                        ui.add_space(PADDING);
+                        ui.label(
+                            RichText::new(format!("> {}", &i.title))
+                                .size(35.0)
+                                .color(Color32::KHAKI),
+                        );
 
-                    ui.label("A shorter and more convenient way to add a label. 😊");
-                    if ui.button("Click me").clicked() {
-                        // take some action here
+                        ui.add_space(PADDING);
+                        ui.label(RichText::new(&i.desc).size(30.0));
+                        ui.add_space(PADDING);
+                        ui.with_layout(Layout::right_to_left(egui::Align::Min), |ui| {
+                            ui.hyperlink_to(RichText::new("read more >").size(30.0), &i.url);
+                        });
+                        ui.add_space(PADDING);
+                        ui.add(Separator::default());
                     }
 
                     ui_counter(ui, &mut c);
