@@ -1,4 +1,6 @@
-use egui::{CentralPanel, Label, ScrollArea, Ui};
+use std::borrow::Cow;
+
+use egui::{CentralPanel, FontData, FontDefinitions, Label, ScrollArea, Ui};
 use macroquad::prelude::*;
 
 struct Lista {
@@ -28,6 +30,19 @@ struct CardData {
 async fn main() {
     let mut c = 0;
     let lista = Lista::new();
+    let mut font_def = FontDefinitions::default();
+    font_def.font_data.insert(
+        "atari".into(),
+        FontData {
+            font: Cow::Borrowed(include_bytes!("../resources/atari_games.ttf")),
+            index: 0,
+            tweak: Default::default(),
+        },
+    );
+
+    font_def
+        .families
+        .insert(egui::FontFamily::Proportional, vec!["atari".to_owned()]);
     loop {
         clear_background(DARKBLUE);
 
@@ -39,6 +54,8 @@ async fn main() {
         //? Pos2::ZERO is left top.
         //? Positions and sizes are measured in points. Each point may consist of many physical pixels.
         egui_macroquad::ui(|ctx| {
+            ctx.set_fonts(font_def.clone());
+
             CentralPanel::default().show(ctx, |ui| {
                 ScrollArea::vertical().show(ui, |ui| {
                     ui.add(Label::new("Hello World!"));
