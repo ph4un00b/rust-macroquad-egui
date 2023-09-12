@@ -61,6 +61,7 @@ async fn main() {
             ctx.set_fonts(font_def.clone());
 
             CentralPanel::default().show(ctx, |ui| {
+                ui_header(ui);
                 ScrollArea::vertical().show(ui, |ui| {
                     ui.add(Label::new("Hello World!"));
 
@@ -94,6 +95,14 @@ async fn main() {
     }
 }
 
+fn ui_header(ui: &mut Ui) {
+    // Put the buttons and label on the same row:
+    ui.vertical_centered(|ui| {
+        ui.heading(RichText::new("hola \\_(' ')_/").size(38.0));
+    });
+    ui.add_space(PADDING);
+    ui.add(Separator::default().spacing(20.));
+}
 fn ui_counter(ui: &mut Ui, counter: &mut i32) {
     // Put the buttons and label on the same row:
     ui.horizontal(|ui| {
